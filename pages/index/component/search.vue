@@ -7,7 +7,7 @@
 			</view>
 			<view class="search">
 				<image src="../../../static/imgs/sousuo.svg" mode="widthFix" class="search-img"></image>
-				<input type="text" value="" placeholder="请输入文字" disabled />
+				<input type="text" @click="toSearch()" value="" placeholder="请输入文字" disabled />
 			</view>
 			<view class="search-code">
 				<image src="../../../static/imgs/xiaoxi.svg" mode="widthFix"></image>
@@ -16,8 +16,9 @@
 
 		<!-- 轮播 -->
 		<view>
-			<swiper class="swiper" :indicator-dots="true" :autoplay="true" :circular="true" interval="5000" duration="500" indicator-active-color="#ffd300">
-				<block v-for="(item,index) in banner" :key="index">
+			<swiper class="swiper" :indicator-dots="true" :autoplay="true" :circular="true" interval="5000" duration="500"
+			 indicator-active-color="#ffd300">
+				<block v-for="(item,index) in banner" :key="item.id">
 					<swiper-item>
 						<image :src="item.url" mode="aspectFill" class="imageUrl"></image>
 					</swiper-item>
@@ -30,19 +31,25 @@
 <script>
 	export default {
 		name: "search",
-		data(){
-			return{
-				banner:[
-					{
-						url:"//gw.alicdn.com/imgextra/i1/66/O1CN01tOeQ1K1CMGkwRpmJe_!!66-0-luban.jpg_790x10000Q75.jpg_.webp"
-					},
-					{
-						url:"//gw.alicdn.com/imgextra/i3/40/O1CN019QiJ8q1CAMSVPaVdZ_!!40-0-luban.jpg_790x10000Q75.jpg_.webp"
-					},
-					{
-						url:"//gw.alicdn.com/imgextra/i4/176/O1CN01HQqZV61DAeK9Zzslg_!!176-0-luban.jpg_790x10000Q75.jpg_.webp"
+		props: {
+			banner: {
+				type: Array
+			}
+		},
+		data() {
+			return {
+				// banner:[]
+			}
+		},
+		methods:{
+			toSearch(){
+				console.log(111)
+				uni.redirectTo({
+					url:"../search/searchPage",
+					success: (err) => {
+						// console.log("页面跳转成功",err)
 					}
-				]
+				})
 			}
 		}
 	}
@@ -96,10 +103,12 @@
 			}
 		}
 	}
-	swiper{
+
+	swiper {
 		width: 100%;
 		height: 300upx !important;
-		.imageUrl{
+
+		.imageUrl {
 			width: 100%;
 			height: 300upx !important;
 		}

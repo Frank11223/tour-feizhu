@@ -2,8 +2,8 @@
 	<view>
 		<scroll-view scroll-x="true" scroll-with-animation="true" class="scroll">
 			<view>
-				<block v-for="(item,index) in scrollList" :key="index">
-					<view class="scrollList" :class="{active:num===index}" @click="changeBg(index)">
+				<block v-for="(item,index) in scrollList" :key="item._id">
+					<view class="scrollList" :class="{active:num===index}" @click="changeBg(index,item)">
 						<view class="activeTil">
 							<text>{{item.title}}</text>
 						</view>
@@ -19,37 +19,30 @@
 <script>
 	export default {
 		name: "scrollX",
+		props:{
+			tab:Array
+		},
+		created(){
+			// console.log("父组件给的值",this.tab);
+		},
 		data(){
 			return{
-				scrollList:[
-					{
-						title:"推荐",
-						subTil:"猜你喜欢"
-					},
-					{
-						title:"旅行直播",
-						subTil:"达人带你玩"
-					},{
-						title:"上海周边",
-						subTil:"惬意过周末"
-					},{
-						title:"古村古镇",
-						subTil:"追忆年华似水"
-					},{
-						title:"ins网红",
-						subTil:"颜值即正义"
-					},
-					{
-						title:"恋人之旅",
-						subTil:"浪漫二人游"
-					}
-				],
+				scrollList:[],
 				num:0
 			}
 		},
+		watch:{
+			tab(newVal){
+				// console.log(newVal);
+				return this.scrollList = newVal;
+			}
+		},
 		methods:{
-			changeBg(index){
+			changeBg(index,item){
+				console.log("被调用了");
 				this.num = index;
+				this.bus.$emit('tabType',item);
+				// console.log("==========",this.bus);
 			}
 		}
 	}

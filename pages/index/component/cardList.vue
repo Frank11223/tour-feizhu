@@ -7,8 +7,8 @@
 						<image :src="item.url" mode="aspectFill"></image>
 					</view>
 					<view class="cont-txt">
-						<view class="title">{{item.title}}</view>
-						<view class="des">{{item.des}}</view>
+						<view class="title" v-if="item.title">{{item.title}}</view>
+						<view class="des" v-if="item.des">{{item.des}}</view>
 						<view class="cont-price">
 							<view class="price">
 								￥{{item.price}}
@@ -28,42 +28,31 @@
 		name: "cardList",
 		data() {
 			return {
-				cardList: [{
-					url: "//gw.alicdn.com/bao/uploaded/i3/2334511726/TB2QOIKpf1TBuNjy0FjXXajyXXa_!!2334511726.jpg_220x10000Q75.jpg_.webp",
-					title: "上海·门票",
-					des: "[上海迪士尼度假区-1日门票]上海迪士尼门票迪斯尼乐园一日票",
-					subTil: "",
-					price: "535",
-					buyed: "50.2万人购买"
-				}, {
-					url: "//gw.alicdn.com/bao/uploaded/i3/2334511726/TB2QOIKpf1TBuNjy0FjXXajyXXa_!!2334511726.jpg_220x10000Q75.jpg_.webp",
-					title: "上海·门票",
-					des: "[上海迪士尼度假区-1日门票]上海迪士尼门票迪斯尼乐园一日票",
-					subTil: "",
-					price: "535",
-					buyed: "50.2万人购买"
-				}, {
-					url: "//gw.alicdn.com/bao/uploaded/i3/2334511726/TB2QOIKpf1TBuNjy0FjXXajyXXa_!!2334511726.jpg_220x10000Q75.jpg_.webp",
-					title: "上海·门票",
-					des: "[上海迪士尼度假区-1日门票]上海迪士尼门票迪斯尼乐园一日票",
-					subTil: "",
-					price: "535",
-					buyed: "50.2万人购买"
-				}, {
-					url: "//gw.alicdn.com/bao/uploaded/i3/2334511726/TB2QOIKpf1TBuNjy0FjXXajyXXa_!!2334511726.jpg_220x10000Q75.jpg_.webp",
-					title: "上海·门票",
-					des: "[上海迪士尼度假区-1日门票]上海迪士尼门票迪斯尼乐园一日票",
-					subTil: "",
-					price: "535",
-					buyed: "50.2万人购买"
-				}, {
-					url: "//gw.alicdn.com/bao/uploaded/i3/2334511726/TB2QOIKpf1TBuNjy0FjXXajyXXa_!!2334511726.jpg_220x10000Q75.jpg_.webp",
-					title: "上海·门票",
-					des: "[上海迪士尼度假区-1日门票]上海迪士尼门票迪斯尼乐园一日票",
-					subTil: "",
-					price: "535",
-					buyed: "50.2万人购买"
-				}]
+				cardList: []
+			}
+		},
+		mounted() {
+			this.bus.$on("tabType", type => {
+				// console.log("收到兄弟组件的值", type);
+				this.queryCardList(type.nav)
+			})
+			//初始化页面填充数据
+			this.queryCardList("recomment");
+		},
+		methods: {
+			//根据类型查询cardlists数据
+			queryCardList(type) {
+				uni.request({
+					url: "http://192.168.80.43:3000/getDetalis",
+					method: "GET",
+					data: {
+						type:type
+					},
+					success: res => {
+						// console.log("分类数据", res.data);
+						this.cardList = res.data;
+					}
+				})
 			}
 		}
 	}
@@ -129,11 +118,13 @@
 				.cont-price {
 					display: flex;
 					justify-content: space-between;
-					.price{
+
+					.price {
 						font-size: 35upx;
 						color: #ff6b28;
 					}
-					.buyed{
+
+					.buyed {
 						font-size: 30upx;
 						color: #cacaca;
 					}

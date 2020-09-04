@@ -1,9 +1,9 @@
 <template>
 	<view class="container">
-		<Search></Search>
+		<Search :banner="banner"></Search>
 		<Ticket></Ticket>
 		<Grid></Grid>
-		<ScollX id="scrollx" :class="{isFixed:isFixed}"></ScollX>
+		<ScollX id="scrollx" :class="{isFixed:isFixed}" :tab="tab"></ScollX>
 		<!-- <view style="height: 2000upx;">{{namepage}}</view> -->
 		<CardList>{{namepage}}</CardList>
 	</view>
@@ -20,7 +20,9 @@
 			return {
 				isFixed: false,
 				dynamicY: "",
-				staticY: ""
+				staticY: "",
+				banner:[],
+				tab:[]
 			}
 		},
 		onReady() {
@@ -30,9 +32,28 @@
 			// console.log(e);
 			this.dynamicY = e.scrollTop;
 		},
+		created(){
+			//轮播接口
+			uni.request({
+				url:"http://192.168.80.43:3000/getBanner",
+				method:"GET",
+				success:res=>{
+					// console.log(res.data);
+					this.banner = res.data;
+				}
+			})
+			uni.request({
+				url:"http://192.168.80.43:3000/getTab",
+				method:"GET",
+				success:res=>{
+					// console.log(res.data)
+					this.tab = res.data;
+				}
+			})
+		},
 		computed: {
 			namepage() {
-				console.log("执行了")
+				// console.log("执行了")
 				if (this.dynamicY > this.staticY) {
 					this.isFixed = true
 				} else {
